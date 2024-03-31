@@ -1,0 +1,26 @@
+- name: Install argocd
+  command: kubectl create namespace argocd && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+- name: Install argocd rollouts
+  command: kubectl create namespace argocd-rollouts && kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+
+- name: Install ArgoCD notifications
+  command: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-notifications/release-1.0/manifests/install.yaml
+
+- name: Install triggers and templates
+  command: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-notifications/release-1.0/catalog/install.yaml
+
+- name: Clone gitops repo
+
+
+## Pushes the generated files to the folder dev
+- name: Generate files from templates
+  template:
+    src: {{item.name}}.j2
+    dest: hyperswitch-gitops/{{env}}/infrastructure/{{item.name}}.yaml
+  with_fileglob:
+  - templates/*.j2
+
+- name: Add files to gitops repo
+
+- name: Commit and push the files to the gitops repo

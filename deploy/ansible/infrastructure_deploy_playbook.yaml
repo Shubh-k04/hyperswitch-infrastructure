@@ -1,0 +1,7 @@
+## This playbook is responsible for generating the argo application (responsible for continuos deployment of the helm charts)
+- name: Deploy and configure argocd
+  hosts: localhost
+  tasks:
+    - name: Include infra_deploy role
+      include_role:
+        name: infra_deploy
