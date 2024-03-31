@@ -1,0 +1,23 @@
+## Argocd ConfigMap to set trigger and template for argocd notifications
+apiVersion: v1
+kind: ConfigMap
+metadata:
+name: argocd-notifications-cm
+data:
+# Define a custom template for email notifications
+template.hyperswitch-template: |
+    message: |
+    {{- if eq .app.status.sync.status "Succeeded" }}
+    # If the application sync is successful
+    Application {{.app.metadata.name}} sync succeeded.
+    Success Rate: {{.app.status.sync.successRate}}
+    Deployment Duration: {{.app.status.sync.duration}}
+    Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+    
+    {{- else}}
+    # If the application sync failed
+    Application {{.app.metadata.name}} sync failed.
+    Failure Rate: {{.app.status.sync.failureRate}}
+    Deployment Duration: {{.app.status.sync.duration}}
+    Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+    {{- end }}

@@ -1,1 +1,2 @@
 env: dev
+argocd_namespace: argocd

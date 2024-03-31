@@ -1,0 +1,39 @@
+## Sources App of Apps
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: {{env}}-bootstrap-sources
+    namespace: "{{ argocd_namespace }}"
+spec:
+    project: default
+    source:
+        repoURL: 'https://github.com/Shubh-k04/hyperswitch-gitops.git'
+        targetRevision: master
+        path: "{{env}}/sources" # path to the application manifests
+    destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: "{{ argocd_namespace }}"
+    syncPolicy:
+        automated:
+        selfHeal: true
+        prune: true
+---
+## Infrastructure App of Apps
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: {{env}}-bootstrap-infrastucture 
+    namespace: "{{ argocd_namespace }}"
+spec:
+    project: default
+    source:
+        repoURL: 'https://github.com/Shubh-k04/hyperswitch-gitops.git'
+        targetRevision: master
+        path: "{{env}}/infrastructure" # path to the infrastructure manifests
+    destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: "{{ argocd_namespace }}"
+    syncPolicy:
+        automated:
+        selfHeal: true
+        prune: true
